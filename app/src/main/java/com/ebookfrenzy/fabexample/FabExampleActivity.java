@@ -11,7 +11,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class FabExampleActivity extends AppCompatActivity {
@@ -35,10 +39,28 @@ public class FabExampleActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                addListItem();
+                Snackbar.make(view, "Item added to list", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", undoOnClickListener).show();
             }
+
+            View.OnClickListener undoOnClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listItems.remove(listItems.size()-1);
+                    adapter.notifyDataSetChanged();
+                    Snackbar.make(view,"Item removed", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
+            };
         });
+
+
+    }
+
+    private void addListItem() {
+        SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US);
+        listItems.add(dateformat.format(new Date()));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
